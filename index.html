@@ -10,16 +10,58 @@
 
 <body>
 	<header>
-		<h1>Home</h1>
-		<p>Welcome to the home page</p>
+		
+		<label for="year-select">Select Year:</label>
+		<select id="year-select" onchange="updateMap()">
+			<option value="2018">2018</option>
+			<option value="2018-2022">2018-2022</option>
+			<option value="2022">2022</option>
+			<option value="2022-2024">2022-2024</option>
+			<option value="2024">2024</option>
+		</select>
+
+		<div id="legend">
+			<p id="building">
+				建物の分布
+				<span style="background-color: white; color: black; border: 1px solid black;">黒：建物</span>
+			</p>
+			<p id="change">
+				時間変化
+				<span style="background-color: red; color: white;">赤：解体</span>
+				<span style="background-color: blue; color: white;">青：新築</span>
+			</p>
+		</div>
+
 	</header>
 	<div id="map"></div>
 	<script>
-		const map = L.map('map').setView([51.505, -0.09], 13);
-		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 19,
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		}).addTo(map)
+		const map = L.map('map').setView([37.492703, 140.987892], 18);
+
+		const updateMap = function() {
+			year = document.getElementById('year-select').value;
+			map.eachLayer(function(layer) {
+				map.removeLayer(layer);
+			});
+			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+				maxZoom: 18,
+			}).addTo(map);
+			L.tileLayer(`https://raw.githubusercontent.com/bull-frog/namie-map/refs/heads/main/tiles/${year}/${year}_18_{x}_{y}.png`, {
+				minZoom: 18,
+				maxZoom: 18,
+				opacity: 0.5,
+			}).addTo(map);
+
+			if (year.includes('-')) {
+				document.getElementById('building').style.display = 'none';
+				document.getElementById('change').style.display = 'block';
+			} else {
+				document.getElementById('building').style.display = 'block';
+				document.getElementById('change').style.display = 'none';
+			}
+		}
+
+		updateMap();
 	</script>
 </body>
 
