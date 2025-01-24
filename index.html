@@ -12,7 +12,7 @@
 
 <body>
 	<header>
-		
+
 		<label for="year-select">Select Year:</label>
 		<select id="year-select" onchange="updateMap()">
 			<option value="2018">2018</option>
@@ -39,9 +39,9 @@
 	<script>
 		const map = L.map('map').setView([37.492703, 140.987892], 18);
 
-		const updateMap = function() {
+		const updateMap = function () {
 			year = document.getElementById('year-select').value;
-			map.eachLayer(function(layer) {
+			map.eachLayer(function (layer) {
 				map.removeLayer(layer);
 			});
 			L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -52,6 +52,7 @@
 				minZoom: 18,
 				maxZoom: 18,
 				opacity: 0.5,
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 			}).addTo(map);
 
 			if (year.includes('-')) {
